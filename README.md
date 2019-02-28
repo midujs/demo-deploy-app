@@ -12,21 +12,18 @@ title Deploy app
 
 ```plantuml
 @startuml
-title Package with docker
+title Package app
 
 Source -> [Docker] : Build image
 [Docker] <- Server : Run image
-
-note right
-  Why package with docker?
-  Problems resolved:
-  - Different language (node, php, go,...)
-  - Different deploy process (yarn serve, yarn start, rails server,... )
-
-  Pros:
-  - Deploy as: `docker run [IMAGE]`
-end note
 @enduml
+```
+
+```sh
+Package with docker?
+Problems resolved:
+- Different language (node, php, go,...)
+- Different deploy process (yarn serve, yarn start, rails server,... )
 ```
 
 ```plantuml
@@ -34,12 +31,12 @@ end note
 title Build image
 
 Source -> [Docker]: +Dockerfile
-
-note right
-  Pros:
-  - Write down manual steps into file
-end note
 @enduml
+```
+
+```sh
+Pros:
+- Just write down manual steps
 ```
 
 ```plantuml
@@ -50,14 +47,19 @@ title Run image
 @enduml
 ```
 
+```sh
+Pros:
+- Deploy with single cmd: `docker run [IMAGE]`
+```
+
 ## Demo guide
 
 Build image
 
 ```sh
-# DOCKER_USER=hoanganh25991
-docker build --tag hoanganh25991/todo-app:v0.1 .
-docker push hoanganh25991/todo-app:v0.1
+REPO=hoanganh25991
+docker build --tag $REPO/todo-app:v0.1 .
+docker push $REPO/todo-app:v0.1
 ```
 
 Run image
