@@ -2,59 +2,61 @@
 
 ## Follow
 
+- Deploy app
+
 ```plantuml
 @startuml
-title Deploy app
-
 (Source) -> (Server)
 @enduml
 ```
 
+- Package & Run
+
 ```plantuml
 @startuml
-title Package app
-
 Source -> [Docker] : Build image
 [Docker] <- Server : Run image
+
+note right
+  Package with docker?
+  Problems resolved:
+  - Different language (node, php, go,...)
+  - Different deploy process (yarn serve, yarn start, rails server,... )
+end note
 @enduml
 ```
 
-```sh
-Package with docker?
-Problems resolved:
-- Different language (node, php, go,...)
-- Different deploy process (yarn serve, yarn start, rails server,... )
-```
+- Build image
 
 ```plantuml
 @startuml
-title Build image
-
 Source -> [Docker]: +Dockerfile
+
+note right
+  Pros:
+  - Just write down manual steps
+end note
 @enduml
 ```
 
-```sh
-Pros:
-- Just write down manual steps
-```
+- Run image
 
 ```plantuml
 @startuml
 title Run image
 
 [Docker] <- Server: +docker-cli
-@enduml
-```
 
-```sh
-Pros:
-- Deploy with single cmd: `docker run [IMAGE]`
+note right
+  Pros:
+  - Single command to deploy: `docker run [IMAGE]`
+end note
+@enduml
 ```
 
 ## Demo guide
 
-Build image
+- Build image
 
 ```sh
 REPO=hoanganh25991
@@ -62,7 +64,7 @@ docker build --tag $REPO/todo-app:v0.1 .
 docker push $REPO/todo-app:v0.1
 ```
 
-Run image
+- Run image
 
 ```sh
 ./setup/install-docker.sh
@@ -76,23 +78,29 @@ docker run --rm --detach \
 
 ## Nginx Reverse
 
+- Handle DNS
+
 ```plantuml
 @startuml
-title Handle DNS
 Server -> [Nginx]: Run image
+[App] -> [Nginx]: Attach
 
-[App] -> [Nginx]: Let nginx redirect to app
+note right
+  Automation:
+  - Manage nginx (start, reload, ssl, proxy,...)
+  - Write config file for each app
+end note
 @enduml
 ```
 
-Setup nginx
+- Setup nginx
 
 ```sh
 cd docker-nginx-reverse-proxy
 docker-compose up
 ```
 
-Run app
+- Run app
 
 ```sh
 DOMAIN_NAME=todo-app.SERVER_IP.nip.io
