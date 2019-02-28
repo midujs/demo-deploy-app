@@ -68,7 +68,7 @@ Run image
 
 ```sh
 docker run --rm --detach \
-  --publish 3000:3000 \
+  --publish 3000:80 \
   hoanganh25991/todo-app:v0.1
 ```
 
@@ -77,40 +77,27 @@ docker run --rm --detach \
 ```plantuml
 @startuml
 title Handle DNS
-
-[App] -> [Nginx]
-@enduml
-```
-
-```plantuml
-@startuml
-title Setup Nginx
-
 Server -> [Nginx]: Run image
+
+[App] -> [Nginx]: Let nginx redirect to app
 @enduml
 ```
 
 Setup nginx
 
 ```sh
+cd docker-nginx-reverse-proxy
 docker-compose up
 ```
 
 Run app
 
 ```sh
-DOMAIN_NAME=todo-app.xxx.nip.io
-EMAIL=lehoanganh25991@gmail.com
+DOMAIN_NAME=todo-app.SERVER_IP.nip.io
 docker run --rm --detach \
-  --name todo-app \
+  --network nginx \
   --env VIRTUAL_HOST=$DOMAIN_NAME \
   --env LETSENCRYPT_HOST=$DOMAIN_NAME \
-  --env LETSENCRYPT_EMAIL=$EMAIL \
+  --env LETSENCRYPT_EMAIL=admin@example.com \
   hoanganh25991/todo-app:v0.1
-```
-
-Connect app to nginx
-
-```sh
-docker network connect todo-app nginx
 ```
